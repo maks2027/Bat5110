@@ -73,9 +73,7 @@ uint8_t cinStep;
 
 volatile bool adcType = true;//флаг какой пин считвается
 volatile int vcc = 1023;
-//volatile int tempVcc = 1023;
 volatile int but = 0;
-//bool err = false;
 
 //общее меню
 const int8_t sizeMenu = 5;
@@ -90,18 +88,17 @@ int8_t settingsMenuMin[3] = {0, 0, 0};
 int8_t settingsMenuMax[3] = {10, 10, 60};
 bool settingsMenuEdit[3] = {false};
 
-
-extern int __bss_end;
-extern void *__brkval;
-int memoryFree()
-{
-   int freeValue;
-   if((int)__brkval == 0)
-      freeValue = ((int)&freeValue) - ((int)&__bss_end);
-   else
-      freeValue = ((int)&freeValue) - ((int)__brkval);
-   return freeValue;
-}
+//extern int __bss_end;
+//extern void *__brkval;
+//int memoryFree()
+//{
+//   int freeValue;
+//   if((int)__brkval == 0)
+//      freeValue = ((int)&freeValue) - ((int)&__bss_end);
+//   else
+//      freeValue = ((int)&freeValue) - ((int)__brkval);
+//   return freeValue;
+//}
 
 void dispPos(const float &val,uint8_t n = 3)
 {
@@ -136,8 +133,8 @@ void menu_0_update()//основные данные
     display.drawRect(82, 2, 2, 3, BLACK);
 
 
-    display.setCursor(0 , 11);
-    display.println(memoryFree());
+//    display.setCursor(0 , 11);
+//    display.println(memoryFree());
 
 
 //    if (bat.overLoad() == 3)
