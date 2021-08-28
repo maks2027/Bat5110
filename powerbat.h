@@ -2,9 +2,7 @@
 #define POWERBAT_H
 
 #include <Arduino.h>
-//#include <GyverTimer.h>
 #include <EEPROM.h>
-//#include <avr/eeprom.h>
 #include "litetimer.h"
 
 class PowerBat
@@ -22,6 +20,7 @@ public:
 
     uint8_t overLoad();//уровни перегрузки (0 в норме)
     bool discharged();
+    bool charge();
 
     void save();
 
@@ -48,6 +47,7 @@ private:
     uint8_t _overLoad = 0;
 
     bool _discharged = false;
+    bool _charge = false;
 
     float _WMax = 0;
     float _omBat = 0.05;
@@ -68,6 +68,7 @@ private:
 
     LiteOneTimer errorTime;
     LiteOneTimer dischargedTime;
+    LiteOneTimer chargeTime;
 
     void calculW();
 

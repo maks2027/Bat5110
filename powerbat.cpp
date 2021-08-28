@@ -42,12 +42,9 @@ void PowerBat::setAmper(float A)
 {
     _A = filterA(A);
 
+    //нужно как-кто по красивше упоковать
     calculW();
     isDischarged();
-
-    //    if(_discharged)
-    //       _W = 0;
-
     calculPercent();
 }
 
@@ -66,6 +63,11 @@ void PowerBat::work()
         if(_discharged)
             _W = 0;
     }
+
+    if(chargeTime.isReady())
+    {
+       _charge = false;
+    }
 }
 
 uint8_t PowerBat::overLoad()
@@ -76,6 +78,11 @@ uint8_t PowerBat::overLoad()
 bool PowerBat::discharged()
 {
     return _discharged;
+}
+
+bool PowerBat::charge()
+{
+    return _charge;
 }
 
 void PowerBat::save()
@@ -130,11 +137,20 @@ void PowerBat::calculW()
 
     _Wh = _A * _V;
 
-    if(_W > _WMax)
-        _WMax = _W;
+    if(_Wh > 0)
+    {
+        _charge = true;
+        chargeTime.start(1000);
+    }
 
-    if(_V >= maxV && _W < _WMax)
-        _WMax = _W;
+    if(_charge)
+    {
+        if(_W > _WMax)
+            _WMax = _W;
+
+        if(_V >= maxV && _W < _WMax)
+            _WMax = _W;
+    }
 
 
     if(_overLoad == 3) return;
