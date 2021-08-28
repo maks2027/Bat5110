@@ -121,7 +121,6 @@ void menu_0_update()//основные данные
     display.print(sensor.tempMax(), 1);
 
 
-
     display.setCursor(32 , 0);
     if(bat.getPercent() < 100) display.print(" ");
     display.print(bat.getPercent());
@@ -133,20 +132,20 @@ void menu_0_update()//основные данные
     display.drawRect(82, 2, 2, 3, BLACK);
 
 
-//    display.setCursor(0 , 11);
-//    display.println(memoryFree());
+    //    display.setCursor(0 , 11);
+    //    display.println(memoryFree());
 
 
-//    if (bat.overLoad() == 3)
-//    {
-//        display.setCursor(3 , 11);
-//        display.print(utf8rus(F("ошибка")));
-//    }
-//    if (bat.discharged())
-//    {
-//        display.setCursor(3 , 18);
-//        display.print(utf8rus(F("разряжен")));
-//    }
+    //    if (bat.overLoad() == 3)
+    //    {
+    //        display.setCursor(3 , 11);
+    //        display.print(utf8rus(F("ошибка")));
+    //    }
+    //    if (bat.discharged())
+    //    {
+    //        display.setCursor(3 , 18);
+    //        display.print(utf8rus(F("разряжен")));
+    //    }
 
 
     display.setCursor(78 , 23);
@@ -170,7 +169,6 @@ void menu_0_update()//основные данные
     display.setCursor(34 , 41);
     dispPos(bat.getWh(),2);
     display.print(bat.getWh(), 3);
-
 }
 
 void menu_1_update()// Подробные данные о акумуляторе
@@ -453,7 +451,7 @@ void setup()
 {
     Watchdog.enable(RESET_MODE, WDT_PRESCALER_128);
 
-   // Serial.begin(115200);
+    // Serial.begin(115200);
 
     Wire.begin();
     Wire.setWireTimeout();
@@ -471,24 +469,24 @@ void setup()
     display.begin();
     display.clearDisplay();
     display.cp437(true);
-    display.setContrast(showToValCon(settingsMenu[1])); // установка контраста
-    display.setTextSize(1); // размер шрифта 2
-    display.setTextColor(BLACK); // цвет текста чёрный
+    display.setContrast(showToValCon(settingsMenu[1]));
+    display.setTextSize(1);
+    display.setTextColor(BLACK);
 
     //время
     if (!rtc.begin())
-        rtcIsWork = false;
-    else
-        rtcIsWork = true;
-
-    if (rtcIsWork)
     {
+        rtcIsWork = false;
+        curTime = "err";
+        spek.danger(3000);
+    }
+    else
+    {
+        rtcIsWork = true;
         //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
         now = rtc.now();
         curTime = now.timestamp(DateTime::TIMESTAMP_STIME);
     }
-    else
-        curTime = "err";
 
     cinStep = 0;
 
@@ -496,6 +494,7 @@ void setup()
     if (!adc.init())
     {
         errorAdc = true;
+        spek.danger(3000);
     }
     else
     {
@@ -531,9 +530,6 @@ void setup()
     ADC_attachInterrupt(adcReady);
     ADC_autoTriggerEnable(FREE_RUN);
     ADC_startConvert();
-
-
-    //spek.danger(15000);
 
     Watchdog.reset();
 
@@ -599,6 +595,7 @@ void loop()
         }
     }
 
+    //ключи открыть не сразу, а через время
     if(StartTimer.isReady())
     {
         keys.loadStatus();
@@ -617,16 +614,11 @@ void loop()
     bat.work();
     spek.work();
 
-    if(errorAdc)
-    {
-        spek.alarm(10000);
-    }
-
     //АЦП
     if (ADCTimer.isReady(20) && !errorAdc)
     {
         if (channel) //Ток
-        {           
+        {
             bat.setAmper(adc.getResult_mV() / 1000 / 0.02275);
             adc.setCompareChannels(ADS1115_COMP_0_1);
         }
@@ -677,7 +669,7 @@ void loop()
 
             keys.keyErrOn();
 
-            if(tempDanger == 2)//предыдущие состояние было предупреждение
+            if(tempDanger == 2)//предыдущие состояние было предупреждение (смахивает на костыль..)
                 spek.noDanger();
         }
         else if(sensor.getTempDanger() == 2)
@@ -715,6 +707,7 @@ void loop()
                 curTime = "error";
                 rtcIsWork = false;
                 cinStep = 0;
+                spek.danger(3000);
             }
 
             curTime = tempTime;
