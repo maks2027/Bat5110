@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 #include "litetimer.h"
+#include <util/atomic.h>
 
 class PowerBat
 {

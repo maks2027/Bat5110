@@ -26,9 +26,12 @@ uint16_t PowerBat::begin(uint16_t startByte)
 
 void PowerBat::init()
 {
-    _W = 0;
-    _WMax = 0;
-    _omBat = 0;
+    ATOMIC_BLOCK(ATOMIC_FORCEON)
+    {
+        _W = 0;
+        _WMax = 0;
+        _omBat = 0;
+    }
 
     save();
 }
@@ -60,13 +63,16 @@ void PowerBat::work()
 
     if(dischargedTime.isReady())
     {
-        if(_discharged)
-            _W = 0;
+        ATOMIC_BLOCK(ATOMIC_FORCEON)
+        {
+            if(_discharged)
+                _W = 0;
+        }
     }
 
     if(chargeTime.isReady())
     {
-       _charge = false;
+        _charge = false;
     }
 }
 
@@ -129,11 +135,15 @@ float PowerBat::getOmBat() const
 
 void PowerBat::calculW()
 {
-    _W += _A * _V * (millis() - prevMillis) / 3600000; //расчет емкости АКБ в ВтЧ
-    prevMillis = millis();
+    ATOMIC_BLOCK(ATOMIC_FORCEON)
+    {
+        _W += _A * _V * (millis() - prevMillis) / 3600000; //расчет емкости АКБ в ВтЧ
+        prevMillis = millis();
 
-    if(_W < 0)
-        _W = 0;
+
+        if(_W < 0)
+            _W = 0;
+    }
 
     _Wh = _A * _V;
 
@@ -143,13 +153,16 @@ void PowerBat::calculW()
         chargeTime.start(1000);
     }
 
-    if(_charge)
+    ATOMIC_BLOCK(ATOMIC_FORCEON)
     {
-        if(_W > _WMax)
-            _WMax = _W;
+        if(_charge)
+        {
+            if(_W > _WMax)
+                _WMax = _W;
 
-        if(_V >= maxV && _W < _WMax)
-            _WMax = _W;
+            if(_V >= maxV && _W < _WMax)
+                _WMax = _W;
+        }
     }
 
 
