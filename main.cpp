@@ -1,3 +1,5 @@
+#include <avr/io.h>
+
 #include <Wire.h>
 #include <SPI.h>
 #include <EEPROM.h>
@@ -9,7 +11,6 @@
 
 #include "GyverWDT.h"
 #include "GyverButton.h"
-//#include "GyverTimer.h"
 #include <GyverPower.h>
 
 #include "temper.h"

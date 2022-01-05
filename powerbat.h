@@ -38,6 +38,7 @@ private:
     const float minV = 9.9;
     const float errV = 9.0;
     const float maxV = 12.6;
+    const float maxChargeV = 12.4;
 
     uint8_t _percent = 0;
     float _W = 0;//остаток ваттов
