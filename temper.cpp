@@ -77,9 +77,9 @@ void Temper::analysis()
     if(tempDanger == 3) return;//третий уровень не сбрасываемый
 
 
-    if(temps[0] > 45 || temps[1] > 45 || temps[2] > 45 || temps[3] > 60 || temps[4] > 60)
+    if(temps[0] > 45 || temps[1] > 45 || temps[2] > 45 || temps[3] > 65 || temps[4] > 65)
         tempDanger = 3;
-    else if(temps[0] > 40 || temps[1] > 40 || temps[2] > 40 || temps[3] > 55 || temps[4] > 55)
+    else if(temps[0] > 40 || temps[1] > 40 || temps[2] > 40 || temps[3] > 60 || temps[4] > 60)
         tempDanger = 2;
     else
         tempDanger = 0;

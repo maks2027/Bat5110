@@ -6,6 +6,8 @@ file(GLOB bat5110_file CONFIGURE_DEPENDS "*.h" "*.cpp")
 
 add_executable(bat5110 ${bat5110_file})
 
+set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+
 target_link_arduino_libraries(bat5110 PRIVATE "Adafruit BusIO" "Adafruit GFX Library" AUTO_PRIVATE)
 target_link_arduino_libraries("Adafruit GFX Library" PUBLIC "Adafruit BusIO")
 target_link_arduino_libraries("Adafruit PCD8544 Nokia 5110 LCD library" PUBLIC "Adafruit GFX Library")

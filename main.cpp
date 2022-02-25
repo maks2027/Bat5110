@@ -1,4 +1,4 @@
-#include <avr/io.h>
+﻿#include <avr/io.h>
 
 #include <Wire.h>
 #include <SPI.h>
@@ -51,12 +51,10 @@ PowerBat bat;
 KeyManager keys;
 Speaker spek;
 
-
 GButton butList;
 GButton butEdit;
 GButton butUp;
 GButton butDown;
-
 
 int8_t overLoad = 0;
 int8_t tempDanger = 0;
@@ -101,7 +99,7 @@ bool settingsMenuEdit[3] = {false};
 //   return freeValue;
 //}
 
-void dispPos(const float &val,uint8_t n = 3)
+void dispPos(const float &val, uint8_t n = 3)
 {
     if (val >= 0)
         display.print(" ");
@@ -160,16 +158,16 @@ void menu_0_update()//основные данные
 
 
     display.setCursor(34 , 23);
-    dispPos(bat.getV(),2);
-    display.print(bat.getV(), 3);
+    dispPos(bat.getV(),3);
+    display.print(bat.getV(), 2);
 
     display.setCursor(34 , 32);
-    dispPos(bat.getA(),2);
-    display.print(bat.getA(), 3);
+    dispPos(bat.getA(),3);
+    display.print(bat.getA(), 2);
 
     display.setCursor(34 , 41);
-    dispPos(bat.getWh(),2);
-    display.print(bat.getWh(), 3);
+    dispPos(bat.getWh(),3);
+    display.print(bat.getWh(), 2);
 }
 
 void menu_1_update()// Подробные данные о акумуляторе
@@ -221,13 +219,13 @@ void menu_1_update()// Подробные данные о акумуляторе
 void menu_2_update()// Подробные данные о датчиках
 {
     display.setCursor(1 , 0);
-    display.print(utf8rus(F("Бат 1")));
+    display.print(F("BAT 1"));
 
     display.setCursor(1 , 8);
-    display.print(utf8rus(F("Бат 2")));
+    display.print(F("BAT 2"));
 
     display.setCursor(1 , 16);
-    display.print(utf8rus(F("Бат 3")));
+    display.print(F("BAT 3"));
 
     display.setCursor(1 , 24);
     display.print(F("USB"));
@@ -277,13 +275,13 @@ void menu_3_update()
 void menu_4_update()//настройки
 {
     display.setCursor(13 , 0);
-    display.print(utf8rus(F("Яркость")));
+    display.print(F("Light"));
 
     display.setCursor(13 , 8);
-    display.print(utf8rus(F("Контраст")));
+    display.print(F("Contrast"));
 
     display.setCursor(13 , 16);
-    display.print(utf8rus(F("Таймер")));
+    display.print(F("Off light"));
 
     for (uint8_t i = 0; i < 3; i++)
     {
@@ -303,7 +301,7 @@ void menu_4_update()//настройки
         }
 
         //состояние
-        display.setCursor(66 , 8 * i);
+        display.setCursor(75 , 8 * i);
         display.println(settingsMenu[i]);
     }
 }
@@ -451,8 +449,6 @@ void adcReady()
 void setup()
 {
     Watchdog.enable(RESET_MODE, WDT_PRESCALER_128);
-
-    // Serial.begin(115200);
 
     Wire.begin();
     Wire.setWireTimeout();

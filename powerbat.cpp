@@ -157,11 +157,10 @@ void PowerBat::calculW()
     {
         if(_charge)
         {
-            if(_W > _WMax || _V >= maxChargeV)
+            if(_W > _WMax || _V >= maxV)
                 _WMax = _W;
         }
     }
-
 
     if(_overLoad == 3) return;
 
